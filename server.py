@@ -1,21 +1,31 @@
-import requests
-import serial
+import server_settings
+import tornado.web
+import tornado.httpserver
 
-ser = serial.Serial('/dev/tty.usbmodem1412', 19200, timeout=1)
-ser.readline()
 
-while True:
-    line = ser.readline().replace('\n', '')
-    print line
-    if not line:
-        continue
-    fields = line.split(',')
-    url = 'https://api.thingspeak.com/update?api_key=D6QJVBI8TE96ONRK'
-    for i, field in enumerate(fields):
-        print '\t', field
-        url += '&field{0}={1}'.format(i + 1, field)
-    print url
-    requests.get(url)
-    print '\n'
+class Application(tornado.web.Application):
+    def __init__(self):
+        handlers = [
+            (r"/", MainHandler)
+        ]
+        settings = {
+            "template_path": server_settings.TEMPLATE_PATH,
+            "static_path": server_settings.STATIC_PATH,
+        }
+        tornado.web.Application.__init__(self, handlers, **settings)
 
-ser.close()
+
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("index.html")
+
+
+def main():
+    applicaton = Application()
+    http_server = tornado.httpserver.HTTPServer(applicaton)
+    http_server.listen(9999)
+
+    tornado.ioloop.IOLoop.instance().start()
+
+if __name__ == "__main__":
+    main()
