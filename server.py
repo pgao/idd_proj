@@ -1,3 +1,4 @@
+import os
 import server_settings
 import tornado.web
 import tornado.httpserver
@@ -23,7 +24,8 @@ class MainHandler(tornado.web.RequestHandler):
 def main():
     applicaton = Application()
     http_server = tornado.httpserver.HTTPServer(applicaton)
-    http_server.listen(9999)
+    port = int(os.environ.get("PORT", 9999))
+    http_server.listen(port)
 
     tornado.ioloop.IOLoop.instance().start()
 

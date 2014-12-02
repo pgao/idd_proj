@@ -9,7 +9,6 @@ import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
@@ -40,21 +40,18 @@ public class MainActivity extends Activity {
     public static UUID RX_UUID = UUID.fromString("6E400003-B5A3-F393-E0A9-E50E24DCCA9E");
     // UUID for the BTLE client characteristic which is necessary for notifications.
     public static UUID CLIENT_UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
+    public static int num_sensors = 6;
 
     // UI elements
     private TextView messages;
     private Button btnOn, btnOff;
-    private TextView temp;
+    private TextView[] vals;
 
     // BTLE state
     private BluetoothAdapter adapter;
     private BluetoothGatt gatt;
     private BluetoothGattCharacteristic tx;
     private BluetoothGattCharacteristic rx;
-    
-    // Temperature polling
-    private Handler handler;
-    private int updateInterval = 100;
 
     // Main BTLE device callback where much of the logic occurs.
     private BluetoothGattCallback callback = new BluetoothGattCallback() {
@@ -116,9 +113,11 @@ public class MainActivity extends Activity {
             super.onCharacteristicChanged(gatt, characteristic);
             String received = characteristic.getStringValue(0);
             writeLine("Received: " + received);
-        	updateTemp(received);
+            int i = Integer.parseInt(received.substring(0, 1));
+            String val = received.substring(1, 3);
+        	updateVal(val, i);
 
-        	String url = "https://api.thingspeak.com/update?api_key=D6QJVBI8TE96ONRK&field1=" + received;
+        	String url = "https://api.thingspeak.com/update?api_key=D6QJVBI8TE96ONRK&field" + (i + 1) + "=" + val;
             
         	writeLine(url);
         	
@@ -164,7 +163,20 @@ public class MainActivity extends Activity {
         messages = (TextView) findViewById(R.id.messages);
         btnOn = (Button) findViewById(R.id.btnOn);
         btnOff = (Button) findViewById(R.id.btnOff);
-        temp = (TextView) findViewById(R.id.sensor1);
+        
+        vals = new TextView[num_sensors];
+        for(int i = 0; i < num_sensors; i++) {
+			try {
+		    	Class<?> clazz = R.id.class; // get the R class
+		    	Field f;
+				f = clazz.getField("sensor" + i);
+		    	int id = f.getInt(null);  // pass in null, since field is a static field.
+		    	vals[i] = (TextView) findViewById(id);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
         
         btnOn.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
@@ -179,21 +191,7 @@ public class MainActivity extends Activity {
         });
 
         adapter = BluetoothAdapter.getDefaultAdapter();
-        
-        handler = new Handler();
-        checkTemp.run();
     }
-
-    // Update temperature reading
-    private Runnable checkTemp = new Runnable() {
-        public void run() {
-	        if (tx != null) {
-	            // Only poll if we have a connection
-	        	sendMessage("p");
-	        }
-            handler.postDelayed(checkTemp, updateInterval);
-        }
-    };
 
     // OnResume, called right before UI is displayed.  Start the BTLE connection.
     @Override
@@ -241,17 +239,17 @@ public class MainActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                messages.append(text);
-                messages.append("\n");
+//                messages.append(text);
+//                messages.append("\n");
             }
         });
     }
     
-    private void updateTemp(final CharSequence text) {
+    private void updateVal(final CharSequence text, final int i) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                temp.setText(text);
+                vals[i].setText(text);
             }
         });
     }

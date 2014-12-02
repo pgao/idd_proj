@@ -20,51 +20,130 @@
             android:layout_height="wrap_content" />
     </ScrollView>
 
-    <Button
-        android:id="@+id/btnOff"
+    <TextView
+        android:id="@+id/lightLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/btnOn"
-        android:layout_alignBottom="@+id/btnOn"
-        android:layout_alignRight="@+id/scrollView1"
-        android:layout_marginRight="65dp"
-        android:text="Off" />
+        android:layout_above="@+id/scrollView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="86dp"
+        android:text="Pressure light control:" />
 
     <Button
         android:id="@+id/btnOn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignTop="@+id/lightLabel"
         android:layout_marginRight="44dp"
-        android:layout_marginTop="112dp"
+        android:layout_marginTop="27dp"
         android:layout_toLeftOf="@+id/btnOff"
         android:text="On" />
 
-    <TextView
-        android:id="@+id/tempLabel"
+    <Button
+        android:id="@+id/btnOff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/btnOn"
-        android:layout_marginTop="20dp"
-        android:text="Sensor 1 Pressure:" />
+        android:layout_alignBottom="@+id/btnOn"
+        android:layout_alignRight="@+id/scrollView1"
+        android:layout_marginRight="46dp"
+        android:text="Off" />
 
     <TextView
-        android:id="@+id/fanLabel"
+        android:id="@+id/sensor2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnOff"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="14dp"
-        android:text="Pressure light control:" />
+        android:layout_alignBaseline="@+id/sensor2label"
+        android:layout_alignBottom="@+id/sensor2label"
+        android:layout_alignLeft="@+id/sensor1"
+        android:text="0.0" />
+
+    <TextView
+        android:id="@+id/sensor0label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="14dp"
+        android:text="Sensor 0 Pressure:" />
 
     <TextView
         android:id="@+id/sensor1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tempLabel"
-        android:layout_alignBottom="@+id/tempLabel"
-        android:layout_alignLeft="@+id/btnOff"
+        android:layout_alignLeft="@+id/sensor0"
+        android:layout_below="@+id/sensor0"
+        android:text="0.0" />
+
+    <TextView
+        android:id="@+id/sensor0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sensor1label"
+        android:layout_toRightOf="@+id/lightLabel"
+        android:text="0.0" />
+
+    <TextView
+        android:id="@+id/sensor3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/sensor2"
+        android:layout_below="@+id/sensor2"
+        android:text="0.0" />
+
+    <TextView
+        android:id="@+id/sensor1label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/sensor0label"
+        android:layout_below="@+id/sensor0label"
+        android:text="Sensor 1 Pressure:" />
+
+    <TextView
+        android:id="@+id/sensor2label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/sensor1label"
+        android:layout_below="@+id/sensor1label"
+        android:text="Sensor 2 Pressure:" />
+
+    <TextView
+        android:id="@+id/sensor3label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/sensor2label"
+        android:layout_below="@+id/sensor2label"
+        android:text="Sensor 3 Pressure:" />
+
+    <TextView
+        android:id="@+id/sensor4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/sensor4label"
+        android:layout_alignBottom="@+id/sensor4label"
+        android:layout_toRightOf="@+id/lightLabel"
+        android:text="0.0" />
+
+    <TextView
+        android:id="@+id/sensor4label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/sensor3label"
+        android:layout_below="@+id/sensor3label"
+        android:text="Sensor 4 Pressure:" />
+
+    <TextView
+        android:id="@+id/sensor5label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/sensor4label"
+        android:layout_below="@+id/sensor4label"
+        android:text="Sensor 5 Pressure:" />
+
+    <TextView
+        android:id="@+id/sensor5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/sensor5label"
+        android:layout_alignBottom="@+id/sensor5label"
+        android:layout_alignLeft="@+id/sensor4"
         android:text="0.0" />
 
 </RelativeLayout>
