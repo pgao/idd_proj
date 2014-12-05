@@ -246,12 +246,13 @@ int id action_context_bar 0x7f09001d
 int id action_menu_divider 0x7f090002
 int id action_menu_presenter 0x7f090003
 int id action_mode_close_button 0x7f090024
-int id action_settings 0x7f09004d
+int id action_settings 0x7f09004f
 int id activity_chooser_view_content 0x7f090025
 int id always 0x7f09000f
 int id beginning 0x7f090016
 int id btnOff 0x7f090040
 int id btnOn 0x7f09003f
+int id btnStatus 0x7f09004d
 int id checkbox 0x7f09002d
 int id collapseActionView 0x7f090010
 int id default_activity_button 0x7f090028
@@ -306,6 +307,7 @@ int id showCustom 0x7f09000b
 int id showHome 0x7f09000c
 int id showTitle 0x7f09000d
 int id split_action_bar 0x7f09001e
+int id statusText 0x7f09004e
 int id submit_area 0x7f090039
 int id tabMode 0x7f090008
 int id title 0x7f09002b

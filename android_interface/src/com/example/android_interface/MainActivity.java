@@ -14,10 +14,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
@@ -44,8 +47,9 @@ public class MainActivity extends Activity {
 
     // UI elements
     private TextView messages;
-    private Button btnOn, btnOff;
+    private Button btnOn, btnOff, btnStatus;
     private TextView[] vals;
+    private EditText statusText;
 
     // BTLE state
     private BluetoothAdapter adapter;
@@ -163,6 +167,8 @@ public class MainActivity extends Activity {
         messages = (TextView) findViewById(R.id.messages);
         btnOn = (Button) findViewById(R.id.btnOn);
         btnOff = (Button) findViewById(R.id.btnOff);
+        btnStatus = (Button) findViewById(R.id.btnStatus);
+        statusText = (EditText) findViewById(R.id.statusText);
         
         vals = new TextView[num_sensors];
         for(int i = 0; i < num_sensors; i++) {
@@ -187,6 +193,23 @@ public class MainActivity extends Activity {
         btnOff.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		sendMessage("0");
+            }
+        });
+
+        btnStatus.setOnClickListener(new OnClickListener() {
+        	public void onClick(View v) {
+        		Thread thread = new Thread(new Runnable(){
+	    			@Override
+	    			public void run() {
+	    			    try {
+	    	        		String status = statusText.getText().toString();
+	    	        		updateStatus(status);
+	    			    } catch (Exception e) {
+	    			    	e.printStackTrace();
+	    			    }
+	    			}
+				});
+				thread.start();
             }
         });
 
@@ -230,6 +253,31 @@ public class MainActivity extends Activity {
         else {
             writeLine("Couldn't write TX characteristic!");
         }
+    }
+    
+    public void updateStatus(String message) {
+    	String encoded;
+		try {
+			encoded = URLEncoder.encode(message, "UTF-8");
+	    	String url = "https://api.thingspeak.com/update?api_key=D6QJVBI8TE96ONRK&status=" + encoded;
+	        
+	    	writeLine(url);
+	    	
+	        HttpClient client = new DefaultHttpClient();
+	        HttpGet request = new HttpGet(url);
+	        try {
+				client.execute(request);
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     }
 
     // Write some text to the messages text view.
