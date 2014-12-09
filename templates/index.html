@@ -1,120 +1,41 @@
 <html>
-	<head>
-		<link rel="stylesheet" type="text/css" href="static/style.css">
-		<script src="http://d3js.org/d3.v3.min.js"></script>
-	</head>
-	<body>
-		<div class="title">
-			SmartSocket Prosthetist UI
-		</div>
+    <head>
+        <link rel="stylesheet" type="text/css" href="static/style.css">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="/static/heatmap/build/heatmap.js"></script>
+        <script src="/static/visualization.js"></script>
+    </head>
+    <body>
+        <div class="title">
+            SmartSocket Prosthetist UI
+        </div>
 
-		<div id="heatmap"></div>
+        <div id="heatmapContainer">
+            <div id="heatmap"></div>
+        </div>
 
-		<div id="status">
-			<div class="subtitle">Current Status:</div>
-			<iframe class="statusIFrame" width="450" height="200" frameborder="0" src="http://api.thingspeak.com/channels/17805/status/recent"></iframe>
-		</div>
+        <div id="status">
+            <div class="subtitle">Current Status:</div>
+            <iframe class="statusIFrame" width="450" height="200" frameborder="0" src="http://api.thingspeak.com/channels/17805/status/recent"></iframe>
+        </div>
 
-		<div id="graphs">
-		<iframe width="450" height="260" style="border: 1px solid #cccccc;" src="http://api.thingspeak.com/channels/17805/charts/1?width=450&height=260&results=20&dynamic=true&title=Sensor%201" ></iframe>
+        <div id="graphs">
+        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="http://api.thingspeak.com/channels/17805/charts/1?width=450&height=260&results=20&dynamic=true&title=Sensor%201" ></iframe>
 
-		<iframe width="450" height="260" style="border: 1px solid #cccccc;" src="http://api.thingspeak.com/channels/17805/charts/2?width=450&height=260&results=60&dynamic=true&title=Sensor%202" ></iframe>
+        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="http://api.thingspeak.com/channels/17805/charts/2?width=450&height=260&results=60&dynamic=true&title=Sensor%202" ></iframe>
 
-		<iframe width="450" height="260" style="border: 1px solid #cccccc;" src="http://api.thingspeak.com/channels/17805/charts/3?width=450&height=260&results=60&dynamic=true&title=Sensor%203" ></iframe>
+        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="http://api.thingspeak.com/channels/17805/charts/3?width=450&height=260&results=60&dynamic=true&title=Sensor%203" ></iframe>
 
-		<iframe width="450" height="260" style="border: 1px solid #cccccc;" src="http://api.thingspeak.com/channels/17805/charts/4?width=450&height=260&results=60&dynamic=true&title=Sensor%204" ></iframe>
+        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="http://api.thingspeak.com/channels/17805/charts/4?width=450&height=260&results=60&dynamic=true&title=Sensor%204" ></iframe>
 
-		<iframe width="450" height="260" style="border: 1px solid #cccccc;" src="http://api.thingspeak.com/channels/17805/charts/5?width=450&height=260&results=60&dynamic=true&title=Sensor%205" ></iframe>
+        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="http://api.thingspeak.com/channels/17805/charts/5?width=450&height=260&results=60&dynamic=true&title=Sensor%205" ></iframe>
 
-		<iframe width="450" height="260" style="border: 1px solid #cccccc;" src="http://api.thingspeak.com/channels/17805/charts/6?width=450&height=260&results=60&dynamic=true&title=Sensor%206" ></iframe>
-		</div>
-
-
-		<script>
-
-		var width = 960,
-		    height = 500;
-
-		d3.json("/static/heatmap.json", function(error, heatmap) {
-		  var dx = heatmap[0].length,
-		      dy = heatmap.length;
-
-		  // Fix the aspect ratio.
-		  // var ka = dy / dx, kb = height / width;
-		  // if (ka < kb) height = width * ka;
-		  // else width = height / ka;
-
-		  var x = d3.scale.linear()
-		      .domain([0, dx])
-		      .range([0, width]);
-
-		  var y = d3.scale.linear()
-		      .domain([0, dy])
-		      .range([height, 0]);
-
-		  var color = d3.scale.linear()
-		      .domain([95, 115, 135, 155, 175, 195])
-		      .range(["#0a0", "#6c0", "#ee0", "#eb4", "#eb9", "#fff"]);
-
-		  var xAxis = d3.svg.axis()
-		      .scale(x)
-		      .orient("top")
-		      .ticks(20);
-
-		  var yAxis = d3.svg.axis()
-		      .scale(y)
-		      .orient("right");
-
-		  d3.select("#heatmap").append("canvas")
-		      .attr("width", dx)
-		      .attr("height", dy)
-		      .style("width", width + "px")
-		      .style("height", height + "px")
-		      .call(drawImage);
-
-		  var svg = d3.select("#heatmap").append("svg")
-		      .attr("width", width)
-		      .attr("height", height);
-
-		  svg.append("g")
-		      .attr("class", "x axis")
-		      .attr("transform", "translate(0," + height + ")")
-		      .call(xAxis)
-		      .call(removeZero);
-
-		  svg.append("g")
-		      .attr("class", "y axis")
-		      .call(yAxis)
-		      .call(removeZero);
-
-		  // Compute the pixel colors; scaled by CSS.
-		  function drawImage(canvas) {
-		    var context = canvas.node().getContext("2d"),
-		        image = context.createImageData(dx, dy);
-
-		    for (var y = 0, p = -1; y < dy; ++y) {
-		      for (var x = 0; x < dx; ++x) {
-		        var c = d3.rgb(color(heatmap[y][x]));
-		        image.data[++p] = c.r;
-		        image.data[++p] = c.g;
-		        image.data[++p] = c.b;
-		        image.data[++p] = 255;
-		      }
-		    }
-
-		    context.putImageData(image, 0, 0);
-		  }
-
-		  function removeZero(axis) {
-		    axis.selectAll("g").filter(function(d) { return !d; }).remove();
-		  }
-		});
-
-		</script>
+        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="http://api.thingspeak.com/channels/17805/charts/6?width=450&height=260&results=60&dynamic=true&title=Sensor%206" ></iframe>
+        </div>
 
 
-		<a id="csvButton" href="https://api.thingspeak.com/stream/channels/17805/feeds?api_key=D6QJVBI8TE96ONRK">
-			Download Data as CSV
-		</a>
-	</body>
+        <a id="csvButton" href="https://api.thingspeak.com/stream/channels/17805/feeds?api_key=D6QJVBI8TE96ONRK">
+            Download Data as CSV
+        </a>
+    </body>
 </html>
