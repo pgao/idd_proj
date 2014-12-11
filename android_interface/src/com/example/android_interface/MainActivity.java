@@ -46,8 +46,8 @@ public class MainActivity extends Activity {
     public static int num_sensors = 6;
 
     // UI elements
-    private TextView messages;
-    private Button btnOn, btnOff, btnStatus;
+    private TextView messages, connectionStatus;
+    private Button btnStatus;
     private TextView[] vals;
     private EditText statusText;
 
@@ -65,6 +65,7 @@ public class MainActivity extends Activity {
             super.onConnectionStateChange(gatt, status, newState);
             if (newState == BluetoothGatt.STATE_CONNECTED) {
                 writeLine("Connected!");
+                updateConnectionStatus("Connected!");
                 // Discover services.
                 if (!gatt.discoverServices()) {
                     writeLine("Failed to start discovering services!");
@@ -72,9 +73,11 @@ public class MainActivity extends Activity {
             }
             else if (newState == BluetoothGatt.STATE_DISCONNECTED) {
                 writeLine("Disconnected!");
+                updateConnectionStatus("Disconnected!");
             }
             else {
                 writeLine("Connection state changed.  New state: " + newState);
+                updateConnectionStatus("Connection state changed.  New state: " + newState);
             }
         }
 
@@ -165,8 +168,7 @@ public class MainActivity extends Activity {
 
         // Grab references to UI elements.
         messages = (TextView) findViewById(R.id.messages);
-        btnOn = (Button) findViewById(R.id.btnOn);
-        btnOff = (Button) findViewById(R.id.btnOff);
+        connectionStatus = (TextView) findViewById(R.id.connectionStatus);
         btnStatus = (Button) findViewById(R.id.btnStatus);
         statusText = (EditText) findViewById(R.id.statusText);
         
@@ -183,18 +185,6 @@ public class MainActivity extends Activity {
 				e.printStackTrace();
 			}
     	}
-        
-        btnOn.setOnClickListener(new OnClickListener() {
-        	public void onClick(View v) {
-        		sendMessage("1");
-            }
-        });
-        
-        btnOff.setOnClickListener(new OnClickListener() {
-        	public void onClick(View v) {
-        		sendMessage("0");
-            }
-        });
 
         btnStatus.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
@@ -230,14 +220,14 @@ public class MainActivity extends Activity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (gatt != null) {
-            // For better reliability be careful to disconnect and close the connection.
-            gatt.disconnect();
-            gatt.close();
-            gatt = null;
-            tx = null;
-            rx = null;
-        }
+//        if (gatt != null) {
+//            // For better reliability be careful to disconnect and close the connection.
+//            gatt.disconnect();
+//            gatt.close();
+//            gatt = null;
+//            tx = null;
+//            rx = null;
+//        }
     }
 
     public void sendMessage(String message) {
@@ -289,6 +279,15 @@ public class MainActivity extends Activity {
             public void run() {
 //                messages.append(text);
 //                messages.append("\n");
+            }
+        });
+    }
+    
+    public void updateConnectionStatus(final CharSequence text) {
+    	runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+            	connectionStatus.setText(text);
             }
         });
     }

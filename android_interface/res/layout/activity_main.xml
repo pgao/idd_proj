@@ -21,34 +21,6 @@
     </ScrollView>
 
     <TextView
-        android:id="@+id/lightLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/scrollView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="86dp"
-        android:text="Pressure light control:" />
-
-    <Button
-        android:id="@+id/btnOn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/lightLabel"
-        android:layout_marginRight="44dp"
-        android:layout_marginTop="27dp"
-        android:layout_toLeftOf="@+id/btnOff"
-        android:text="On" />
-
-    <Button
-        android:id="@+id/btnOff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/btnOn"
-        android:layout_alignRight="@+id/scrollView1"
-        android:layout_marginRight="46dp"
-        android:text="Off" />
-
-    <TextView
         android:id="@+id/sensor2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="14dp"
-        android:text="Sensor 0 Pressure:" />
+        android:text="Right Sensor Pressure:" />
 
     <TextView
         android:id="@+id/sensor1"
@@ -70,14 +42,6 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/sensor0"
         android:layout_below="@+id/sensor0"
-        android:text="0.0" />
-
-    <TextView
-        android:id="@+id/sensor0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/sensor1label"
-        android:layout_toRightOf="@+id/lightLabel"
         android:text="0.0" />
 
     <TextView
@@ -94,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/sensor0label"
         android:layout_below="@+id/sensor0label"
-        android:text="Sensor 1 Pressure:" />
+        android:text="Left Sensor Pressure:" />
 
     <TextView
         android:id="@+id/sensor2label"
@@ -102,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/sensor1label"
         android:layout_below="@+id/sensor1label"
-        android:text="Sensor 2 Pressure:" />
+        android:text="Front Sensor Pressure:" />
 
     <TextView
         android:id="@+id/sensor3label"
@@ -110,16 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/sensor2label"
         android:layout_below="@+id/sensor2label"
-        android:text="Sensor 3 Pressure:" />
-
-    <TextView
-        android:id="@+id/sensor4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/sensor4label"
-        android:layout_alignBottom="@+id/sensor4label"
-        android:layout_toRightOf="@+id/lightLabel"
-        android:text="0.0" />
+        android:text="Back Sensor Pressure:" />
 
     <TextView
         android:id="@+id/sensor4label"
@@ -127,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/sensor3label"
         android:layout_below="@+id/sensor3label"
-        android:text="Sensor 4 Pressure:" />
+        android:text="Seat Sensor Pressure:" />
 
     <TextView
         android:id="@+id/sensor5label"
@@ -135,22 +90,13 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/sensor4label"
         android:layout_below="@+id/sensor4label"
-        android:text="Sensor 5 Pressure:" />
-
-    <TextView
-        android:id="@+id/sensor5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/sensor5label"
-        android:layout_alignBottom="@+id/sensor5label"
-        android:layout_alignLeft="@+id/sensor4"
-        android:text="0.0" />
+        android:text="Bottom (cup) Sensor Pressure:" />
 
     <Button
         android:id="@+id/btnStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/lightLabel"
+        android:layout_above="@+id/scrollView1"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="29dp"
         android:text="Update Prosthetic Status" />
@@ -159,10 +105,43 @@
         android:id="@+id/statusText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/sensor5label"
+        android:layout_above="@+id/btnStatus"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
         android:ems="10"
         android:inputType="textMultiLine" />
+
+    <TextView
+        android:id="@+id/sensor0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sensor1label"
+        android:layout_alignRight="@+id/statusText"
+        android:text="0.0" />
+
+    <TextView
+        android:id="@+id/sensor5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/sensor5label"
+        android:layout_alignBottom="@+id/sensor5label"
+        android:layout_alignLeft="@+id/sensor3"
+        android:text="0.0" />
+
+    <TextView
+        android:id="@+id/sensor4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sensor5"
+        android:layout_alignLeft="@+id/sensor5"
+        android:text="0.0" />
+
+    <TextView
+        android:id="@+id/connectionStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sensor5label"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="87dp"
+        android:text="Connecting..." />
 
 </RelativeLayout>

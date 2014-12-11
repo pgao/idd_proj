@@ -18,37 +18,43 @@ $(function() {
   var height = $('#heatmap').height();
 
   var mappings = {
-    1: {
+    // front
+    3: {
       x: width/2,
       y: 80,
       value: 50,
       radius: 70
     },
-    2: {
+    // back
+    4: {
       x: width/2,
       y: 410,
       value: 50,
       radius: 70
     },
-    3: {
+    // left
+    2: {
       x: width * 1/3 - 10,
       y: height/2 - 25,
       value: 50,
       radius: 70
     },
-    4: {
+    // right
+    1: {
       x: width * 2/3 + 10,
       y: height/2 - 25,
       value: 50,
       radius: 70
     },
-    5: {
+    // back
+    6: {
       x: width/2,
       y: height/2 - 25,
       value: 50,
       radius: 70
     },
-    6: {
+    // seat
+    5: {
       x: width/2,
       y: 520,
       value: 50,
@@ -60,6 +66,7 @@ $(function() {
     var points = [];
     updateMappings = function(i) {
       $.getJSON('http://api.thingspeak.com/channels/17805/field/' + i + '/last.json', function(data) {
+        console.log(i + " completed");
         mappings[i]['value'] = parseInt(data['field' + i]);
       });
     }
@@ -72,7 +79,7 @@ $(function() {
       points.push(mappings[i]);
     }
 
-    console.log(points);
+    // console.log(points);
 
     heatmap.setData({
       data: points,
