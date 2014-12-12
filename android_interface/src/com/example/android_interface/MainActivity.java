@@ -50,6 +50,7 @@ public class MainActivity extends Activity {
     private Button btnStatus;
     private TextView[] vals;
     private EditText statusText;
+    private String[] prevVals;
 
     // BTLE state
     private BluetoothAdapter adapter;
@@ -121,17 +122,20 @@ public class MainActivity extends Activity {
 			String received = characteristic.getStringValue(0);
             writeLine("Received: " + received);
             final int i = Integer.parseInt(received.substring(0, 1));
-            final String val = received.substring(1, 3);
+			String val = received.substring(1, 3);
+			if (val.startsWith(" ")) {
+				val = val.substring(1);
+			}
+			if (val.equals("0")) {
+				val = "1";
+			}
+			final String actualVal = val;
             writeLine(val);
         	updateVal(val, i);
             
             Thread thread = new Thread(new Runnable(){
     			@Override
     			public void run() {
-    				String actualVal = val;
-    				if (actualVal.startsWith(" ")) {
-    					actualVal = val.substring(1);
-    				}
     	        	String url = "https://api.thingspeak.com/update?api_key=D6QJVBI8TE96ONRK&field" + (i + 1) + "=" + actualVal;
     	            
     	        	writeLine(url);
@@ -149,9 +153,19 @@ public class MainActivity extends Activity {
     				}
     			}
 			});
-            if (!val.equals(" 0")) {
+            if (!actualVal.equals("1")) {
             	thread.start();
             }
+//            if (actualVal.equals("0") && !prevVals[i].equals("0")) {
+//            	thread.start();
+//            }
+//            else if (!actualVal.equals("0") && !actualVal.equals(prevVals[i])) {
+//            	thread.start();
+//            }
+//            if (!actualVal.equals(prevVals[i])) {
+//    			prevVals[i] = actualVal;
+//            	thread.start();
+//            }
             
         }
     };
@@ -199,6 +213,11 @@ public class MainActivity extends Activity {
 				e.printStackTrace();
 			}
     	}
+        
+        prevVals = new String[num_sensors];
+        for(int i = 0; i < num_sensors; i++) {
+        	prevVals[i] = "1";
+        }
 
         btnStatus.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {

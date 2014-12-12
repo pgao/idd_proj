@@ -1,6 +1,11 @@
 $(function() {
-  var updateDelay = 100;
+  var updateDelay = 300;
   var numSensors = 6;
+
+  // clear prev data
+  for (var i = 0; i < numSensors; i++) {
+    $.getJSON('https://api.thingspeak.com/update?api_key=D6QJVBI8TE96ONRK&field' + i + '=1');
+  }
 
   // create a heatmap instance
   var heatmap = h337.create({
@@ -22,42 +27,42 @@ $(function() {
     3: {
       x: width/2,
       y: 80,
-      value: 50,
+      value: 0,
       radius: 70
     },
     // back
     4: {
       x: width/2,
       y: 410,
-      value: 50,
+      value: 0,
       radius: 70
     },
     // left
     2: {
       x: width * 1/3 - 10,
       y: height/2 - 25,
-      value: 50,
+      value: 0,
       radius: 70
     },
     // right
     1: {
       x: width * 2/3 + 10,
       y: height/2 - 25,
-      value: 50,
+      value: 0,
       radius: 70
     },
     // back
     6: {
       x: width/2,
       y: height/2 - 25,
-      value: 50,
+      value: 0,
       radius: 70
     },
     // seat
     5: {
       x: width/2,
       y: 520,
-      value: 50,
+      value: 0,
       radius: 50
     }
   }
@@ -67,7 +72,8 @@ $(function() {
     updateMappings = function(i) {
       $.getJSON('http://api.thingspeak.com/channels/17805/field/' + i + '/last.json', function(data) {
         console.log(i + " completed");
-        mappings[i]['value'] = parseInt(data['field' + i]);
+        var val = parseInt(data['field' + i]);
+        mappings[i]['value'] = val;
       });
     }
 
