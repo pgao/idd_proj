@@ -118,27 +118,41 @@ public class MainActivity extends Activity {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
-            String received = characteristic.getStringValue(0);
+			String received = characteristic.getStringValue(0);
             writeLine("Received: " + received);
-            int i = Integer.parseInt(received.substring(0, 1));
-            String val = received.substring(1, 3);
+            final int i = Integer.parseInt(received.substring(0, 1));
+            final String val = received.substring(1, 3);
+            writeLine(val);
         	updateVal(val, i);
-
-        	String url = "https://api.thingspeak.com/update?api_key=D6QJVBI8TE96ONRK&field" + (i + 1) + "=" + val;
             
-        	writeLine(url);
-        	
-            HttpClient client = new DefaultHttpClient();
-            HttpGet request = new HttpGet(url);
-            try {
-				client.execute(request);
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            Thread thread = new Thread(new Runnable(){
+    			@Override
+    			public void run() {
+    				String actualVal = val;
+    				if (actualVal.startsWith(" ")) {
+    					actualVal = val.substring(1);
+    				}
+    	        	String url = "https://api.thingspeak.com/update?api_key=D6QJVBI8TE96ONRK&field" + (i + 1) + "=" + actualVal;
+    	            
+    	        	writeLine(url);
+    	        	
+    	            HttpClient client = new DefaultHttpClient();
+    	            HttpGet request = new HttpGet(url);
+    	            try {
+    					client.execute(request);
+    				} catch (ClientProtocolException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				} catch (IOException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}
+    			}
+			});
+            if (!val.equals(" 0")) {
+            	thread.start();
+            }
+            
         }
     };
 
