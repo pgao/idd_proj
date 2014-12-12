@@ -27,42 +27,42 @@ $(function() {
     3: {
       x: width/2,
       y: 80,
-      value: 0,
+      value: 50,
       radius: 70
     },
     // back
     4: {
       x: width/2,
       y: 410,
-      value: 0,
+      value: 50,
       radius: 70
     },
     // left
     2: {
       x: width * 1/3 - 10,
       y: height/2 - 25,
-      value: 0,
+      value: 50,
       radius: 70
     },
     // right
     1: {
       x: width * 2/3 + 10,
       y: height/2 - 25,
-      value: 0,
+      value: 50,
       radius: 70
     },
     // back
     6: {
       x: width/2,
       y: height/2 - 25,
-      value: 0,
+      value: 50,
       radius: 70
     },
     // seat
     5: {
       x: width/2,
       y: 520,
-      value: 0,
+      value: 50,
       radius: 50
     }
   }
